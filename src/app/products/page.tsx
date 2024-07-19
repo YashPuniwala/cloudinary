@@ -14,7 +14,7 @@ const ProductPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   
   const fetchProducts = async () => {
-    const res = await fetch("https://cloudinary-mu.vercel.app/api/products", {
+    const res = await fetch("https://cloudinary-jade.vercel.app/api/products", {
       next: { revalidate: 3600 },
     });
     try {
@@ -44,7 +44,7 @@ const ProductPage = () => {
     e.preventDefault();
     try {
       const res = await fetch(
-        "https://cloudinary-mu.vercel.app/api/removeImage",
+        "https://cloudinary-jade.vercel.app/api/removeImage",
         {
           method: "POST",
           headers: {
