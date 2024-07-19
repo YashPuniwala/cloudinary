@@ -12,23 +12,25 @@ interface ImageData {
 
 const ProductPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
+  
+  const fetchProducts = async () => {
+    const res = await fetch("https://cloudinary-mu.vercel.app/api/products", {
+      next: { revalidate: 3600 },
+    });
+    try {
+      if (!res.ok) {
+        throw new Error("Something went wrong");
+      } else {
+        const data = await res.json();
+        setProducts(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await fetch("https://cloudinary-mu.vercel.app/api/products", {
-        next: { revalidate: 3600 },
-      });
-      try {
-        if (!res.ok) {
-          throw new Error("Something went wrong");
-        } else {
-          const data = await res.json();
-          setProducts(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    
     fetchProducts();
   }, []);
 
@@ -41,13 +43,21 @@ const ProductPage = () => {
   ) => {
     e.preventDefault();
     try {
-      const res = await fetch("https://cloudinary-mu.vercel.app/api/removeImage", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({ publicId: publicIdToRemove, productId, mediaId, type }),
-      });
+      const res = await fetch(
+        "https://cloudinary-mu.vercel.app/api/removeImage",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            publicId: publicIdToRemove,
+            productId,
+            mediaId,
+            type,
+          }),
+        }
+      );
       if (res.ok) {
         // Update the products state with the updated products from the API
         const updatedProducts = await res.json();
@@ -56,6 +66,10 @@ const ProductPage = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleNewPost = () => {
+    fetchProducts();
   };
 
   return (
