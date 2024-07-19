@@ -15,7 +15,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch("http://localhost:3000/api/products", {
+      const res = await fetch("https://cloudinary-mu.vercel.app/api/products", {
         next: { revalidate: 3600 },
       });
       try {
@@ -41,7 +41,7 @@ const ProductPage = () => {
   ) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/api/removeImage", {
+      const res = await fetch("https://cloudinary-mu.vercel.app/api/removeImage", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
